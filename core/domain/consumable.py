@@ -1,4 +1,4 @@
-from core.domain.base_models.item import Item
+from domain.base_models.item import Item
 
 
 class Consumable(Item):

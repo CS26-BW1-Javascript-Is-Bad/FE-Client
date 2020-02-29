@@ -1,58 +1,69 @@
-import pygame
+import pygame as pg
 import random
 import os
-from core.domain.room import Room
-from core.domain.player import Player
-
-WIDTH = 800
-HEIGHT = 600
-FPS = 30
-
-# setup assets folders
-game_folder = os.path.dirname(__file__)
-asset_folder = os.path.join(game_folder, "assets")
-sprite_folder = os.path.join(asset_folder, "sprites")
-tilemap_folder = os.path.join(asset_folder, "tilemaps")
-sound_folder = os.path.join(asset_folder, "sound")
+from domain.room import Room
+from domain.player import Player
+from util.colors import *
+from util.settings import *
 
 
-test_room = Room()
-player_asset = pygame.image.load(
-    os.path.join(sprite_folder, "test_char.png")).convert()
-player = Player(player_asset, test_room)
+class Game:
+    def __init__(self):
+        pg.init()
+        pg.mixer.init()
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
+        pg.display.set_caption(TITLE)
+        self.clock = pg.time.Clock()
+        self.running = True
+        self.all_sprites = pg.sprite.Group()
+    
+    def new(self):
+        self.player = Player(pg.image.load(os.path.join(sprite_folder, "test_char.png")).convert(), Room())
+        self.all_sprites = pg.sprite.Group()
+        self.all_sprites.add(self.player)
+        self.run()
+    
+    def run(self):
+        self.playing = True
+        while self.playing:
+            self.clock.tick(FPS)
+            self.events()
+            self.update()
+            self.draw()
+    
+    def update(self):
+        self.all_sprites.update()
+    
+    def events(self):
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                if self.playing:
+                        self.playing = False
+                self.running = False
+    
+    def draw_grid(self):
+        for x in range(0, WIDTH, TILESIZE):
+            pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
+        for y in range(0, HEIGHT, TILESIZE):
+            pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
+    
+    def draw(self):
+        self.screen.fill(BGCOLOR)
+        self.draw_grid()
+        self.all_sprites.draw(self.screen)
+        pg.display.flip()
+    
+    def show_start_screen(self):
+        pass
+    
+    def show_quit_screen(self):
+        pass
 
-# initialize Pygame and create window
-pygame.init()
-# allows sound
-pygame.mixer.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Javascript is Bad")
-# allows constant fps
-clock = pygame.time.Clock()
-# sets all sprites group, all sprites in a room should be added to this
-all_sprites = pygame.sprite.Group()
-player_group = pygame.sprite.Group()
-mobs = pygame.sprite.Group()
-items = pygame.sprite.Group()
 
-all_sprites.add(player)
-player_group.add(player)
-# Game Loop
-running = True
-while running:
-    # keep loop running at the right speed
-    clock.tick(FPS)
-    # Process input (events)
-    for event in pygame.event.get():
-        # check for closing window
-        if event.type == pygame.QUIT:
-            running = False
-    # Update
-    all_sprites.update()
-    # Draw / render
-    screen.fill(BLACK)
-    all_sprites.draw(screen)
-    # sets up double buffering - always doing this After drawing everything
-    pygame.display.flip()
+g = Game()
+while g.running:
+    g.show_start_screen
+    g.new()
+    g.show_quit_screen
+pg.quit()
 
-pygame.quit()

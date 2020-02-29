@@ -7,3 +7,6 @@ class Room:
         self.w_to = w_to
         self.items = items
         self.entities = entities
+        # todo change these variables to build from tile_map
+        self.WIDTH = 800
+        self.HEIGHT = 600

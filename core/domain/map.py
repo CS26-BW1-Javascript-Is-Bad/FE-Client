@@ -1,4 +1,4 @@
-from core.domain.room import Room
+from domain.room import Room
 
 
 class Map:
