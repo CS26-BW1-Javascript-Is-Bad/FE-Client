@@ -1,3 +1,9 @@
 {
-    "python.pythonPath": "C:\\Users\\Brand\\.virtualenvs\\Intro-Python-II-05JnVy3l\\Scripts\\python.exe"
+    "python.pythonPath": ".venv\\Scripts\\python.exe",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
+    "python.linting.pylintArgs": [
+        "--extension-pkg-whitelist=pygame",
+        "--errors-only"
+    ] // The extension is "lxml" not "1xml"
 }
