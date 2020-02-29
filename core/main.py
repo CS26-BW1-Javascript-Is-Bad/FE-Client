@@ -1,17 +1,25 @@
 import pygame
 import random
+import os
+from core.domain.room import Room
+from core.domain.player import Player
 
 WIDTH = 800
 HEIGHT = 600
 FPS = 30
 
-# define colors
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
+# setup assets folders
+game_folder = os.path.dirname(__file__)
+asset_folder = os.path.join(game_folder, "assets")
+sprite_folder = os.path.join(asset_folder, "sprites")
+tilemap_folder = os.path.join(asset_folder, "tilemaps")
+sound_folder = os.path.join(asset_folder, "sound")
 
+
+test_room = Room()
+player_asset = pygame.image.load(
+    os.path.join(sprite_folder, "test_char.png")).convert()
+player = Player(player_asset, test_room)
 
 # initialize Pygame and create window
 pygame.init()
@@ -21,8 +29,14 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Javascript is Bad")
 # allows constant fps
 clock = pygame.time.Clock()
-
+# sets all sprites group, all sprites in a room should be added to this
 all_sprites = pygame.sprite.Group()
+player_group = pygame.sprite.Group()
+mobs = pygame.sprite.Group()
+items = pygame.sprite.Group()
+
+all_sprites.add(player)
+player_group.add(player)
 # Game Loop
 running = True
 while running:
