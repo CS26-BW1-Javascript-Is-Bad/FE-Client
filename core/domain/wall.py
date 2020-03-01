@@ -26,3 +26,16 @@ class Obstacle(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x
         self.rect.y = y
+        
+class Portal(pg.sprite.Sprite):
+    def __init__(self, game, x, y, w, h, dir):
+        self.dir = dir
+        self.groups = game.all_sprites, game.portals
+        self.image = pg.image.load(path.join(sprite_folder, "blank.png")).convert_alpha()
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.rect = pg.Rect(x, y, w, h)
+        self.x = x
+        self.y = y
+        self.rect.x = x
+        self.rect.y = y

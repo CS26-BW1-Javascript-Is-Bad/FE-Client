@@ -64,6 +64,9 @@ class Player(Entity):
                     self.can_jump = True
                     self.vel.y = 0
                 self.rect.y = self.pos.y
+             hits = pg.sprite.spritecollide(self, self.game.portals, False)
+             if hits:
+                self.game.change_map(self.game.map.to_e)
 
     def update(self):
         self.get_keys()
