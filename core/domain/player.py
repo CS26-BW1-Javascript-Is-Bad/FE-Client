@@ -51,6 +51,7 @@ class Player(Entity):
                 if self.vel.y > 0:
                     self.pos.y = hits[0].rect.top - self.rect.height
                     self.can_jump = True
+                    self.vel.y = 0
                 if self.vel.y < 0:
                     self.pos.y = hits[0].rect.bottom
                     self.vel.y = 0
@@ -58,7 +59,7 @@ class Player(Entity):
 
     def update(self):
         self.get_keys()
-        self.acc.y = 0.5
+        self.acc.y = .5
         if self.vel.y >= MAX_GRAVITY:
             self.vel.y = MAX_GRAVITY
         self.vel += self.acc

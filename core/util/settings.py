@@ -5,7 +5,7 @@ from util.colors import *
 WIDTH = 1024
 HEIGHT = 768
 FPS = 60
-MAX_GRAVITY = 10
+MAX_GRAVITY = 15
 
 TITLE = "Javascript is Bad"
 
