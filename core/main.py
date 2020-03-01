@@ -6,9 +6,9 @@ from domain.player import Player
 from domain.mob import Mob
 from util.colors import *
 from util.settings import *
-from domain.wall import Wall
+from domain.wall import *
 from domain.platform import Platform
-from domain.map import Map
+from domain.map import *
 from camera import Camera
 
 
@@ -30,18 +30,25 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
         self.camera = Camera(self.map.width, self.map.height)
-        playerx, playery = 0,0
-        for row, tiles in enumerate(self.map.data):
-            for col, tile in enumerate(tiles):
-                if tile == '1':
-                    Wall(self, col, row)
-                if tile == '2':
-                    Platform(self, col, row)
-                if tile == 'm':
-                    Mob(self, col, row)
-                if tile == 'p':
-                    playerx, playery = col, row
-        self.player = Player(Room(), self, playerx, playery)
+        playerx, playery = 10, 10
+        # for row, tiles in enumerate(self.map.data):
+        #     for col, tile in enumerate(tiles):
+        #         if tile == '1':
+        #             Wall(self, col, row)
+        #         if tile == '2':
+        #             Platform(self, col, row)
+        #         if tile == 'm':
+        #             Mob(self, col, row)
+        #         if tile == 'p':
+        #             playerx, playery = col, row
+        
+        for tile_object in self.map.tmxdata.objects:
+            if tile_object.name == 'player':
+                self.player = Player(Room(), self, tile_object.x, tile_object.y)
+            if tile_object.name == 'wall':
+                Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
+            if tile_object.name == 'platform':
+                Platform(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
     
     
     def run(self):
@@ -58,7 +65,9 @@ class Game:
         
     def load_data(self):
         
-        self.map = Map(path.join(game_folder, 'map.txt'))
+        self.map = TiledMap(path.join(tilemap_folder, 'testmap1.tmx'))
+        self.map_img = self.map.make_map()
+        self.map_rect = self.map_img.get_rect()
         self.mob_img = pg.image.load(path.join(sprite_folder, MOB_IMG)).convert_alpha()
         self.mob_img = pg.transform.scale(self.mob_img, (TILESIZE, TILESIZE))
         self.player_img = pg.image.load(path.join(sprite_folder, PLAYER_IMG)).convert_alpha()
@@ -84,7 +93,8 @@ class Game:
     
     def draw(self):
         pg.display.set_caption("{:.2f}".format(self.clock.get_fps()))
-        self.screen.fill(BGCOLOR)
+        self.screen.blit(self.map_img, self.camera.apply_rect(self.map_rect))
+       # self.screen.fill(BGCOLOR)
        # self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))

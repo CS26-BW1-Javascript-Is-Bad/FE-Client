@@ -17,7 +17,7 @@ class Player(Entity):
         self.speed = 5
         self.acc = vec(0, 0)
         self.vel = vec(0, 0)
-        self.pos = vec(x, y) * TILESIZE
+        self.pos = vec(x, y)
         self.game.all_sprites.add(self)
         self.can_jump = True
         

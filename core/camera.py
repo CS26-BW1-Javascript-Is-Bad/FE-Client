@@ -17,6 +17,9 @@ class Camera:
         x = max(-(self.width - WIDTH), x) # right
         y = max(-(self.height - HEIGHT), y) # bottom
         self.camera = pg.Rect(x, y, self.width, self.height)
+        
+    def apply_rect(self, rect):
+        return rect.move(self.camera.topleft)
     
     def apply(self, entity):
         return entity.rect.move(self.camera.topleft)
