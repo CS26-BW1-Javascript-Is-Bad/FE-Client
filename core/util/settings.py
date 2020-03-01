@@ -18,6 +18,7 @@ GRIDHEIGHT = HEIGHT // TILESIZE
 PLAYER_IMG = "test_char.png"
 WALL_IMG = "element_green_square.png"
 MOB_IMG = "test_enemy.png"
+PLATFORM_IMG = "element_blue_square.png"
 
 # Assets
 game_folder = os.path.join(os.path.abspath(os.curdir), "core")

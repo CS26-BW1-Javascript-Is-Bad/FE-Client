@@ -7,6 +7,7 @@ from domain.mob import Mob
 from util.colors import *
 from util.settings import *
 from domain.wall import Wall
+from domain.platform import Platform
 from domain.map import Map
 from camera import Camera
 
@@ -23,19 +24,24 @@ class Game:
         self.map_data = []
     
     def new(self):
-        self.all_sprites = pg.sprite.Group()
+        self.all_sprites = pg.sprite.LayeredUpdates()
         self.load_data()
         self.walls = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
+        self.platforms = pg.sprite.Group()
         self.camera = Camera(self.map.width, self.map.height)
+        playerx, playery = 0,0
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     Wall(self, col, row)
+                if tile == '2':
+                    Platform(self, col, row)
                 if tile == 'm':
                     Mob(self, col, row)
                 if tile == 'p':
-                    self.player = Player(Room(), self, col, row)
+                    playerx, playery = col, row
+        self.player = Player(Room(), self, playerx, playery)
     
     
     def run(self):
@@ -58,6 +64,8 @@ class Game:
         self.player_img = pg.image.load(path.join(sprite_folder, PLAYER_IMG)).convert_alpha()
         self.wall_img = pg.image.load(path.join(sprite_folder, WALL_IMG)).convert_alpha()
         self.wall_img = pg.transform.scale(self.wall_img, (TILESIZE, TILESIZE))
+        self.platform_img = pg.image.load(path.join(sprite_folder, PLATFORM_IMG)).convert_alpha()
+        self.platform_img = pg.transform.scale(self.platform_img, (TILESIZE, TILESIZE))
     
     def events(self):
         for event in pg.event.get():

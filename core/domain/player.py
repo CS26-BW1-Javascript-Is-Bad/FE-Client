@@ -56,6 +56,14 @@ class Player(Entity):
                     self.pos.y = hits[0].rect.bottom
                     self.vel.y = 0
                 self.rect.y = self.pos.y
+                
+             hits = pg.sprite.spritecollide(self, self.game.platforms, False)
+             if hits:
+                if self.vel.y > 0:
+                    self.pos.y = hits[0].rect.top - self.rect.height
+                    self.can_jump = True
+                    self.vel.y = 0
+                self.rect.y = self.pos.y
 
     def update(self):
         self.get_keys()
