@@ -10,3 +10,6 @@ class Entity(pygame.sprite.Sprite):
         self.lat = lat
         self.lon = lon
         self.room = room
+        
+    def update(self):
+        pass

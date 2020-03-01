@@ -3,6 +3,7 @@ import random
 from os import path
 from domain.room import Room
 from domain.player import Player
+from domain.mob import Mob
 from util.colors import *
 from util.settings import *
 from domain.wall import Wall
@@ -25,13 +26,16 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.load_data()
         self.walls = pg.sprite.Group()
+        self.mobs = pg.sprite.Group()
         self.camera = Camera(self.map.width, self.map.height)
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     Wall(self, col, row)
+                if tile == 'm':
+                    Mob(self, col, row)
                 if tile == 'p':
-                    self.player = Player(pg.image.load(path.join(sprite_folder, "test_char.png")).convert(), Room(), self, col, row)
+                    self.player = Player(Room(), self, col, row)
     
     
     def run(self):
@@ -47,10 +51,13 @@ class Game:
         self.camera.update(self.player)
         
     def load_data(self):
-        game_folder = path.dirname(__file__)
-        self.map = Map(path.join(game_folder, 'map.txt'))
         
-    
+        self.map = Map(path.join(game_folder, 'map.txt'))
+        self.mob_img = pg.image.load(path.join(sprite_folder, MOB_IMG)).convert_alpha()
+        self.mob_img = pg.transform.scale(self.mob_img, (TILESIZE, TILESIZE))
+        self.player_img = pg.image.load(path.join(sprite_folder, PLAYER_IMG)).convert_alpha()
+        self.wall_img = pg.image.load(path.join(sprite_folder, WALL_IMG)).convert_alpha()
+        self.wall_img = pg.transform.scale(self.wall_img, (TILESIZE, TILESIZE))
     
     def events(self):
         for event in pg.event.get():
@@ -68,8 +75,9 @@ class Game:
             pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
     
     def draw(self):
+        pg.display.set_caption("{:.2f}".format(self.clock.get_fps()))
         self.screen.fill(BGCOLOR)
-        self.draw_grid()
+       # self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
         pg.display.flip()
