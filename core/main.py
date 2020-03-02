@@ -9,6 +9,7 @@ from util.settings import *
 from domain.wall import *
 from domain.platform import Platform
 from domain.map import *
+from map_generator import *
 from camera import Camera
 
 
@@ -23,6 +24,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.portals = pg.sprite.Group()
         self.map_data = []
+        self.room = None
     
     def new(self):
         self.all_sprites = pg.sprite.LayeredUpdates()
@@ -31,7 +33,7 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
         self.load_data()
-        self.camera = Camera(self.map.width, self.map.height)
+        self.camera = Camera(self.room.width, self.room.height)
         # for row, tiles in enumerate(self.map.data):
         #     for col, tile in enumerate(tiles):
         #         if tile == '1':
@@ -57,19 +59,22 @@ class Game:
         self.all_sprites.update()
         self.camera.update(self.player)
         
-    def change_map(self, map):
+    def change_room(self, room):
+        if room is None:
+            return
+        self.room = room
+        self.room.init()
         self.all_sprites.empty()
         self.walls.empty()
         self.platforms.empty()
         self.mobs.empty()
         self.portals.empty()
-        self.map = map
-        self.map.init()
-        self.map_img = self.map.make_map()
+        self.map_img = self.room.make_map()
         self.map_rect = self.map_img.get_rect()
+        pg.time.delay(100)
         
-        for tile_object in self.map.tmxdata.objects:
-            if tile_object.name == 'player':
+        for tile_object in self.room.tmxdata.objects:
+            if tile_object.name == 'p_d':
                 self.player = Player(Room(), self, tile_object.x, tile_object.y)
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
@@ -77,9 +82,14 @@ class Game:
                 Platform(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
             if tile_object.name == 'portal_e':
                 Portal(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height, 'e')
-                #set map will be done before this, replace this later
-                self.map.to_e = TiledMap(path.join(tilemap_folder, 'testmap2.tmx'))
-        
+            if tile_object.name == 'portal_w':
+                Portal(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height, 'w')
+            if tile_object.name == 'portal_n':
+                Portal(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height, 'n')
+            if tile_object.name == 'portal_s':
+                Portal(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height, 's')
+
+
     def load_data(self):
         self.mob_img = pg.image.load(path.join(sprite_folder, MOB_IMG)).convert_alpha()
         self.mob_img = pg.transform.scale(self.mob_img, (TILESIZE, TILESIZE))
@@ -88,8 +98,20 @@ class Game:
         self.wall_img = pg.transform.scale(self.wall_img, (TILESIZE, TILESIZE))
         self.platform_img = pg.image.load(path.join(sprite_folder, PLATFORM_IMG)).convert_alpha()
         self.platform_img = pg.transform.scale(self.platform_img, (TILESIZE, TILESIZE))
+        
+        self.map = Room_Generator(6).set_rooms()
         #change this to starter room
-        self.change_map(TiledMap(path.join(tilemap_folder, 'testmap1.tmx')))
+        rand_room = random.choice(self.map)
+        if rand_room.n_to is not None:
+            self.dir = 's'
+        elif rand_room.s_to is not None:
+            self.dir = 'n'
+        elif rand_room.e_to is not None:
+            self.dir = 'w'
+        elif rand_room.w_to is not None:
+            self.dir = 'e'
+        
+        self.change_room(rand_room)
     
     def events(self):
         for event in pg.event.get():

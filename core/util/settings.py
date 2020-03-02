@@ -5,7 +5,7 @@ from util.colors import *
 WIDTH = 1024
 HEIGHT = 768
 FPS = 60
-MAX_GRAVITY = 15
+MAX_GRAVITY = 10
 
 TITLE = "Javascript is Bad"
 
@@ -26,4 +26,3 @@ asset_folder = os.path.join(game_folder, "assets")
 sprite_folder = os.path.join(asset_folder, "sprites")
 tilemap_folder = os.path.join(asset_folder, "tilemaps")
 sound_folder = os.path.join(asset_folder, "sound")
-

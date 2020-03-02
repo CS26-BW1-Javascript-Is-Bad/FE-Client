@@ -24,6 +24,14 @@ class Player(Entity):
     def get_keys(self):
         self.vel = vec(0, self.vel.y)
         keys = pg.key.get_pressed()
+        if keys[pg.K_i]:
+            self.game.change_room(self.game.room.n_to)
+        if keys[pg.K_k]:
+            self.game.change_room(self.game.room.s_to)
+        if keys[pg.K_j]:
+            self.game.change_room(self.game.room.w_to)
+        if keys[pg.K_l]:
+            self.game.change_room(self.game.room.e_to)
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vel.x = -self.speed
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
@@ -66,7 +74,15 @@ class Player(Entity):
                 self.rect.y = self.pos.y
              hits = pg.sprite.spritecollide(self, self.game.portals, False)
              if hits:
-                self.game.change_map(self.game.map.to_e)
+                 self.game.dir = hits[0].dir
+                 if hits[0].dir == 'n':
+                    self.game.change_room(self.game.room.n_to)
+                 if hits[0].dir == 's':
+                    self.game.change_room(self.game.room.s_to)
+                 if hits[0].dir == 'e':
+                    self.game.change_room(self.game.room.e_to)
+                 if hits[0].dir == 'w':
+                    self.game.change_room(self.game.room.w_to)
 
     def update(self):
         self.get_keys()
