@@ -1,42 +1,40 @@
-from domain.base_models.entity import Entity
-from util.colors import *
-from util.settings import *
 import pygame as pg
+
+from core.domain.base_models.entity import *
+from core.util.settings import *
+
 vec = pg.math.Vector2
 
 class Player(Entity):
     
-    def __init__(self,room, game, x, y, inventory=None, equipped_weapon=None):
+    def __init__(self, game, x, y, inventory=None, equipped_weapon=None):
         self.image = game.player_img
         self.image = pg.transform.scale(self.image, (TILESIZE, TILESIZE))
         self.rect = self.image.get_rect()
-        super().__init__(self.image, self.rect, room)
+        super().__init__(self.image, self.rect)
         self.inventory = inventory
         self.game = game
         self.equipped_weapon = equipped_weapon
         self.speed = 5
+        self.start_x = x
+        self.start_y = y
         self.acc = vec(0, 0)
         self.vel = vec(0, 0)
         self.pos = vec(x, y)
         self.game.all_sprites.add(self)
         self.can_jump = True
+        self.can_move = False
         
     def get_keys(self):
         self.vel = vec(0, self.vel.y)
         keys = pg.key.get_pressed()
-        if keys[pg.K_i]:
-            self.game.change_room(self.game.room.n_to)
-        if keys[pg.K_k]:
-            self.game.change_room(self.game.room.s_to)
-        if keys[pg.K_j]:
-            self.game.change_room(self.game.room.w_to)
-        if keys[pg.K_l]:
-            self.game.change_room(self.game.room.e_to)
+        if keys[pg.K_u]:
+            self.pos = vec(self.game.room.width//2, self.game.room.height//2)
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vel.x = -self.speed
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vel.x = self.speed
-        if keys[pg.K_UP] or keys[pg.K_w]:
+        if keys[pg.K_SPACE]:
             if self.can_jump:
                 self.jump()
                 self.can_jump = False
@@ -45,6 +43,7 @@ class Player(Entity):
         self.vel.y = -20
         
     def collide_with_walls(self, dir):
+        keys = pg.key.get_pressed()
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
@@ -66,7 +65,7 @@ class Player(Entity):
                 self.rect.y = self.pos.y
                 
              hits = pg.sprite.spritecollide(self, self.game.platforms, False)
-             if hits:
+             if hits and not (keys[pg.K_s] or keys[pg.K_DOWN]):
                 if self.vel.y > 0:
                     self.pos.y = hits[0].rect.top - self.rect.height
                     self.can_jump = True
@@ -74,6 +73,8 @@ class Player(Entity):
                 self.rect.y = self.pos.y
              hits = pg.sprite.spritecollide(self, self.game.portals, False)
              if hits:
+                 self.vel.y = 0
+                 self.vel.x = 0
                  self.game.dir = hits[0].dir
                  if hits[0].dir == 'n':
                     self.game.change_room(self.game.room.n_to)
@@ -85,13 +86,24 @@ class Player(Entity):
                     self.game.change_room(self.game.room.w_to)
 
     def update(self):
-        self.get_keys()
-        self.acc.y = .5
-        if self.vel.y >= MAX_GRAVITY:
-            self.vel.y = MAX_GRAVITY
-        self.vel += self.acc
-        self.pos += self.vel + 0.5 * self.acc
-        self.rect.x = self.pos.x
-        self.collide_with_walls('x')
-        self.rect.y = self.pos.y
-        self.collide_with_walls('y')
+        if self.can_move:
+            self.get_keys()
+            self.acc.y = .5
+            if self.vel.y >= MAX_GRAVITY:
+                self.vel.y = MAX_GRAVITY
+            self.vel += self.acc
+            self.pos += self.vel + 0.5 * self.acc
+            self.rect.x = self.pos.x
+            self.collide_with_walls('x')
+            self.rect.y = self.pos.y
+            self.collide_with_walls('y')
+        else:
+            self.acc.y = 0
+            self.acc.x = 0
+            self.vel.y = 0
+            self.vel.x = 0
+            self.rect.x = self.pos.x
+            self.rect.y = self.pos.y
+            if self.game.dir == 'n':
+                self.vel.y = -5
+            self.can_move = True

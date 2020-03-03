@@ -48,10 +48,9 @@
   <object id="12" x="224" y="1056"/>
   <object id="13" name="platform" x="448" y="896" width="128" height="32"/>
   <object id="14" x="224" y="1056"/>
-  <object id="15" name="p_w" x="128" y="800" width="32" height="32"/>
+  <object id="15" name="p_w" x="64" y="864" width="32" height="32"/>
   <object id="16" name="portal_w" x="0" y="768" width="32" height="128"/>
-  <object id="17" x="-128" y="512"/>
-  <object id="18" name="p_s" x="512" y="800" width="32" height="32"/>
+  <object id="18" name="p_s" x="512" y="864" width="32" height="32"/>
   <object id="19" name="p_d" x="448" y="288" width="32" height="32"/>
  </objectgroup>
 </map>

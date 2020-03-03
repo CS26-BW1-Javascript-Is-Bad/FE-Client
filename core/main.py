@@ -1,16 +1,14 @@
 import pygame as pg
 import random
 from os import path
-from domain.room import Room
-from domain.player import Player
-from domain.mob import Mob
-from util.colors import *
-from util.settings import *
-from domain.wall import *
-from domain.platform import Platform
-from domain.map import *
-from map_generator import *
-from camera import Camera
+
+from core.camera import *
+from core.domain.platform import *
+from core.domain.player import *
+from core.domain.wall import *
+from core.map_generator import *
+from core.util.colors import *
+from core.util.settings import *
 
 
 class Game:
@@ -18,6 +16,7 @@ class Game:
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
+        self.screen.fill(BGCOLOR)
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True
@@ -56,6 +55,8 @@ class Game:
             self.draw()
     
     def update(self):
+        if self.player.pos.x < 0 or self.player.pos.x > self.room.width or self.player.pos.y < 0 or self.player.pos.y > self.room.height:
+            self.player.pos = pg.math.Vector2(self.player.start_x, self.player.start_y)
         self.all_sprites.update()
         self.camera.update(self.player)
         
@@ -74,8 +75,14 @@ class Game:
         pg.time.delay(100)
         
         for tile_object in self.room.tmxdata.objects:
-            if tile_object.name == 'p_d':
-                self.player = Player(Room(), self, tile_object.x, tile_object.y)
+            if tile_object.name == 'p_n' and self.dir == 's':
+                self.player = Player(self, tile_object.x, tile_object.y)
+            if tile_object.name == 'p_s'and self.dir == 'n':
+                self.player = Player(self, tile_object.x, tile_object.y)
+            if tile_object.name == 'p_e'and self.dir == 'w':
+                self.player = Player(self, tile_object.x, tile_object.y)
+            if tile_object.name == 'p_w'and self.dir == 'e':
+                self.player = Player(self, tile_object.x, tile_object.y)
             if tile_object.name == 'wall':
                 Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
             if tile_object.name == 'platform':

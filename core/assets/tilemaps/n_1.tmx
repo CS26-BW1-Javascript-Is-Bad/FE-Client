@@ -50,7 +50,7 @@
   <object id="22" name="wall" x="32" y="0" width="384" height="32"/>
   <object id="23" name="wall" x="544" y="0" width="384" height="32"/>
   <object id="24" name="portal_n" x="416" y="0" width="128" height="32"/>
-  <object id="31" name="p_n" x="480" y="128" width="32" height="32"/>
+  <object id="31" name="p_n" x="480" y="96" width="32" height="32"/>
   <object id="32" x="224" y="416"/>
   <object id="33" name="p_d" x="416" y="384" width="32" height="32"/>
  </objectgroup>

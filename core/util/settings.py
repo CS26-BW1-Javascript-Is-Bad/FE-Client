@@ -5,7 +5,7 @@ from util.colors import *
 WIDTH = 1024
 HEIGHT = 768
 FPS = 60
-MAX_GRAVITY = 10
+MAX_GRAVITY = 30
 
 TITLE = "Javascript is Bad"
 
@@ -21,7 +21,7 @@ MOB_IMG = "test_enemy.png"
 PLATFORM_IMG = "element_blue_square.png"
 
 # Assets
-game_folder = os.path.join(os.path.abspath(os.curdir), "core")
+game_folder = os.path.join(os.path.abspath(os.curdir))
 asset_folder = os.path.join(game_folder, "assets")
 sprite_folder = os.path.join(asset_folder, "sprites")
 tilemap_folder = os.path.join(asset_folder, "tilemaps")

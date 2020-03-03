@@ -42,7 +42,7 @@
   <object id="3" name="wall" x="32" y="0" width="928" height="32"/>
   <object id="4" name="wall" x="0" y="0" width="32" height="768"/>
   <object id="5" name="portal_w" x="0" y="768" width="32" height="128"/>
-  <object id="7" name="p_w" x="128" y="800" width="32" height="32"/>
+  <object id="7" name="p_w" x="64" y="864" width="32" height="32"/>
   <object id="8" name="p_d" x="448" y="288" width="32" height="32"/>
  </objectgroup>
 </map>

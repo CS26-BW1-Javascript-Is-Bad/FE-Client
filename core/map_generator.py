@@ -1,11 +1,10 @@
 import random
+from os import path
 import numpy as np
-import itertools
-import pygame as pg
-import os.path as path
-from util.settings import *
-from domain.room import Room
-        
+
+from core.domain.room import *
+from core.util.settings import *
+
 
 class DisjointSet:
     
