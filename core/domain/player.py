@@ -24,6 +24,7 @@ class Player(Entity):
         self.game.all_sprites.add(self)
         self.can_jump = True
         self.can_move = False
+        self.move_right = True
         
     def get_keys(self):
         self.vel = vec(0, self.vel.y)
@@ -32,8 +33,14 @@ class Player(Entity):
             self.pos = vec(self.game.room.width//2, self.game.room.height//2)
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vel.x = -self.speed
+            if self.move_right:
+                self.image = pg.transform.flip(self.image, True, False)
+                self.move_right = False
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vel.x = self.speed
+            if not self.move_right:
+                self.image = pg.transform.flip(self.image, True, False)
+                self.move_right = True
         if keys[pg.K_SPACE]:
             if self.can_jump:
                 self.jump()
@@ -71,6 +78,9 @@ class Player(Entity):
                     self.can_jump = True
                     self.vel.y = 0
                 self.rect.y = self.pos.y
+             elif hits and (keys[pg.K_s] or keys[pg.K_DOWN]):
+                 pass
+                #add logic to slow player down if holding key down and falling through platform
              hits = pg.sprite.spritecollide(self, self.game.portals, False)
              if hits:
                  self.vel.y = 0

@@ -16,7 +16,6 @@ class Game:
         pg.init()
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-        self.screen.fill(BGCOLOR)
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="19">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="19">
  <tileset firstgid="1" source="temp_portal.tsx"/>
  <tileset firstgid="2" source="../../../../../../tileset_1.tsx"/>
+ <tileset firstgid="44" source="backdrop_forest.tsx"/>
+ <imagelayer id="3" name="Image Layer 1" offsetx="-96" offsety="32">
+  <image source="../sprites/c0_hep.png" width="1538" height="862"/>
+ </imagelayer>
  <layer id="1" name="Tile Layer 1" width="30" height="30">
   <data encoding="csv">
 10,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,10,
@@ -50,9 +54,9 @@
   <object id="12" x="224" y="1056"/>
   <object id="13" name="platform" x="448" y="896" width="128" height="32"/>
   <object id="14" x="224" y="1056"/>
-  <object id="15" name="p_w" x="128" y="800" width="32" height="32"/>
-  <object id="16" name="p_s" x="512" y="800" width="32" height="32"/>
-  <object id="17" name="p_e" x="800" y="800" width="32" height="32"/>
+  <object id="15" name="p_w" x="64" y="864" width="32" height="32"/>
+  <object id="16" name="p_s" x="512" y="864" width="32" height="32"/>
+  <object id="17" name="p_e" x="864" y="864" width="32" height="32"/>
   <object id="18" name="p_d" x="416" y="256" width="32" height="32"/>
  </objectgroup>
 </map>

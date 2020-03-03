@@ -2,7 +2,7 @@ import os
 from util.colors import *
 
 # game settings
-WIDTH = 1024
+WIDTH = 960
 HEIGHT = 768
 FPS = 60
 MAX_GRAVITY = 30
