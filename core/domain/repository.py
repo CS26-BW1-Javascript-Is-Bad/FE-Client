@@ -1,5 +1,5 @@
 from core.data.remote_data_source import *
-from core.util.constants import *
+import core.util.constants as constants
 
 
 def get_room_by_id(id):
@@ -7,8 +7,6 @@ def get_room_by_id(id):
 
 
 def get_map():
-    ck = {'Authorization': f'Token {Login_Token}'}
-    return map_from_json(make_get_request(f'{MAP_URL}', ck))
+    ck = {'Authorization': f'Token {constants.TOKEN}'}
+    return map_from_json(make_get_request(f'{constants.MAP_URL}', ck))
 
-
-Login_Token = login()

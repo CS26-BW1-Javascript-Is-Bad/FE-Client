@@ -1,6 +1,6 @@
 from core.domain.map import Map
 from core.domain.room import Room
-from core.util.constants import *
+import core.util.constants as constants
 import requests
 import json
 
@@ -25,8 +25,8 @@ def make_post_request(input_url, input_headers="", input_data=""):
 
 
 def room_from_id(id):
-    ck = {'Authorization': f'Token {Login_Token}'}
-    return room_from_json(make_get_request(f'{ROOM_BY_ID_URL}{id}', ck))
+    ck = {'Authorization': f'Token {constants.TOKEN}'}
+    return room_from_json(make_get_request(f'{constants.ROOM_BY_ID_URL}{id}', ck))
 
 
 def room_from_json(input="", parsed_input=""):
@@ -44,12 +44,14 @@ def room_from_json(input="", parsed_input=""):
                 input_json['y'])
 
 
-def login():
-    ck = {'username': 'newtyler1', 'password': 'newtyler1'}
+def login(username, password):
+    ck = {'username': {username}, 'password': {password}}
     test = requests.post('https://jibadventuregame.herokuapp.com/api/login/', ck)
-    return json.loads(test.content)['key']
+    if test.status_code != 200:
+        return None
+    else:
+        return json.loads(test.content)['key']
 
-Login_Token = login()
 
 
 def room_to_json(room):
@@ -79,7 +81,7 @@ def map_from_json(input_raw):
 def player_change_room(dir):
     # ck = {'Authorization': f'Token {Login_Token}'}
     # make_get_request('https://jibadventuregame.herokuapp.com/api/adv/init/', ck)
-    ck = {'Authorization': f'Token {Login_Token}', "Content-Type": "application/json"}
+    ck = {'Authorization': f'Token {constants.TOKEN}', "Content-Type": "application/json"}
     request_data = ""
     if dir == 'w':
         request_data = '{"direction":"w"}'
@@ -89,5 +91,5 @@ def player_change_room(dir):
         request_data = '{"direction":"s"}'
     if dir == 'e':
         request_data = '{"direction":"e"}'
-    request = make_post_request(MOVE_URL, ck, request_data)
+    request = make_post_request(constants.MOVE_URL, ck, request_data)
     print(request)

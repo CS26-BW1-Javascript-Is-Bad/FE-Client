@@ -8,6 +8,8 @@ MOVE_URL = f'{ADV_URL}move/'
 ROOM_BY_ID_URL = f'{ADV_URL}room/'
 MAP_URL = f'{ADV_URL}map/'
 
+TOKEN = None
+
 
 # Player
 player_uuid = 'uuid'

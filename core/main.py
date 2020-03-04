@@ -10,7 +10,10 @@ from core.domain.repository import *
 from core.domain.wall import *
 from core.map_generator import *
 from core.util.colors import *
+from core.util.functions import draw_text
 from core.util.settings import *
+from core.util.text_input import *
+import core.util.constants as constants
 
 
 class Game:
@@ -144,18 +147,69 @@ class Game:
         pg.display.flip()
     
     def show_start_screen(self):
+        draw_text(self.screen, "TEST TEXT", 24, 400, 400)
 
-        pass
     
     def show_quit_screen(self):
         pass
 
 
+    def game_intro(self):
+        intro = True
+        textinput = TextInput()
+        textinput.antialias = True
+        textinput.font_object = pg.font.Font(pg.font.match_font('arial'), 30)
+
+        textinput2 = TextInput()
+        textinput2.antialias = True
+        textinput2.font_object = pg.font.Font(pg.font.match_font('arial'), 30)
+
+        username_focus = True
+        username = ""
+        password = ""
+        login_successful = False
+
+        while intro:
+            events = pg.event.get()
+            for event in events:
+                print(event)
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    quit()
+            self.screen.fill((255, 255, 255))
+
+            if username_focus:
+                if textinput.update(events):
+                    username = textinput.get_text()
+                    username_focus = False
+
+            else:
+                if textinput2.update(events):
+                    password = textinput2.get_text()
+                    username_focus = True
+                    constants.TOKEN = login(username, password)
+                    if constants.TOKEN:
+                        return
+                    else:
+                        draw_text(self.screen, "Invalid Information", 30, w//2, 50)
+
+            # Blit its surface onto the screen
+            w, h = pg.display.get_surface().get_size()
+            draw_text(self.screen, "Username", 30, w//2, h//2 - 200)
+            self.screen.blit(textinput.get_surface(), (w//2-100, h//2 - 150))
+            draw_text(self.screen, "Password", 30, w//2, h//2)
+            self.screen.blit(textinput2.get_surface(), (w//2-100, h//2 + 50))
+
+            pygame.display.update()
+            self.clock.tick(30)
+
+
 g = Game()
 while g.running:
-    g.show_start_screen
+    g.show_start_screen()
+    g.game_intro()
     g.new()
     g.run()
-    g.show_quit_screen
+    g.show_quit_screen()
 pg.quit()
 
