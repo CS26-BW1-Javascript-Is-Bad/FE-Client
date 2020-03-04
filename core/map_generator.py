@@ -2,6 +2,7 @@ import random
 from os import path
 import numpy as np
 
+from core.domain.map import Map
 from core.domain.room import *
 from core.util.settings import *
 
@@ -35,6 +36,8 @@ class Room_Generator:
 
         for x in range(0, grid_size):
             for y in range(0, grid_size):
+                self.rooms[x][y].x = x
+                self.rooms[x][y].y = y
                 node = (x, y)
                 self.adj_list[node] = list() 
         
@@ -58,8 +61,8 @@ class Room_Generator:
             
         
         
-    def get_rooms(self):
-        return self.rooms
+    def make_map(self):
+        return Map(self.set_rooms())
         
     def set_rooms(self):
         counter = 0

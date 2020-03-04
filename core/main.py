@@ -1,8 +1,9 @@
 import pygame as pg
 import random
 from os import path
-
+import json
 from core.camera import *
+from core.domain.map import *
 from core.domain.platform import *
 from core.domain.player import *
 from core.domain.wall import *
@@ -23,6 +24,7 @@ class Game:
         self.portals = pg.sprite.Group()
         self.map_data = []
         self.room = None
+        self.first_load = True
     
     def new(self):
         self.all_sprites = pg.sprite.LayeredUpdates()
@@ -30,19 +32,9 @@ class Game:
         self.walls = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
+        self.mini_map_sprite = pg.sprite.Group()
         self.load_data()
         self.camera = Camera(self.room.width, self.room.height)
-        # for row, tiles in enumerate(self.map.data):
-        #     for col, tile in enumerate(tiles):
-        #         if tile == '1':
-        #             Wall(self, col, row)
-        #         if tile == '2':
-        #             Platform(self, col, row)
-        #         if tile == 'm':
-        #             Mob(self, col, row)
-        #         if tile == 'p':
-        #             playerx, playery = col, row
-        
         
     
     def run(self):
@@ -64,14 +56,16 @@ class Game:
             return
         self.room = room
         self.room.init()
+        self.room.visited = True
         self.all_sprites.empty()
+        self.mini_map_sprite.empty()
         self.walls.empty()
         self.platforms.empty()
         self.mobs.empty()
         self.portals.empty()
         self.map_img = self.room.make_map()
         self.map_rect = self.map_img.get_rect()
-        pg.time.delay(100)
+        self.mini_map = MiniMap(self, self.map)
         
         for tile_object in self.room.tmxdata.objects:
             if tile_object.name == 'p_n' and self.dir == 's':
@@ -94,6 +88,10 @@ class Game:
                 Portal(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height, 'n')
             if tile_object.name == 'portal_s':
                 Portal(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height, 's')
+        if not self.first_load:
+            player_change_room(self.dir)
+        self.first_load = False
+
 
 
     def load_data(self):
@@ -104,17 +102,25 @@ class Game:
         self.wall_img = pg.transform.scale(self.wall_img, (TILESIZE, TILESIZE))
         self.platform_img = pg.image.load(path.join(sprite_folder, PLATFORM_IMG)).convert_alpha()
         self.platform_img = pg.transform.scale(self.platform_img, (TILESIZE, TILESIZE))
-        
-        self.map = Room_Generator(6).set_rooms()
+        ck = {'Authorization' : f'Token {login()}'}
+        test2 = make_get_request('https://jibadventuregame.herokuapp.com/api/adv/room/6', ck)
+        test_room = room_from_json(test2)
+        self.map = Map([test_room])
+        self.dir = 'n'
+
+            #Room_Generator(int(math.sqrt(ROOM_COUNT))).make_map()
+
+        self.map.game = self
+
         #change this to starter room
-        rand_room = random.choice(self.map)
-        if rand_room.n_to is not None:
+        rand_room = random.choice(self.map.rooms)
+        if rand_room.n_to != 0:
             self.dir = 's'
-        elif rand_room.s_to is not None:
+        elif rand_room.s_to != 0:
             self.dir = 'n'
-        elif rand_room.e_to is not None:
+        elif rand_room.e_to != 0:
             self.dir = 'w'
-        elif rand_room.w_to is not None:
+        elif rand_room.w_to != 0:
             self.dir = 'e'
         
         self.change_room(rand_room)
@@ -136,8 +142,7 @@ class Game:
     
     def draw(self):
         pg.display.set_caption("{:.2f}".format(self.clock.get_fps()))
-        self.screen.blit(self.map_img, self.camera.apply_rect(self.map_rect))
-       # self.screen.fill(BGCOLOR)
+        self.screen.blit(self.map_img, self.camera.apply_rect(self.map_rect),)
        # self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))

@@ -6,6 +6,7 @@ WIDTH = 960
 HEIGHT = 768
 FPS = 60
 MAX_GRAVITY = 30
+ROOM_COUNT = 5000
 
 TITLE = "Javascript is Bad"
 

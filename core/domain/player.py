@@ -1,6 +1,7 @@
 import pygame as pg
 
 from core.domain.base_models.entity import *
+from core.domain.room import room_from_id
 from core.util.settings import *
 
 vec = pg.math.Vector2
@@ -87,13 +88,13 @@ class Player(Entity):
                  self.vel.x = 0
                  self.game.dir = hits[0].dir
                  if hits[0].dir == 'n':
-                    self.game.change_room(self.game.room.n_to)
+                    self.game.change_room(room_from_id(self.game.room.n_to))
                  if hits[0].dir == 's':
-                    self.game.change_room(self.game.room.s_to)
+                    self.game.change_room(room_from_id(self.game.room.s_to))
                  if hits[0].dir == 'e':
-                    self.game.change_room(self.game.room.e_to)
+                    self.game.change_room(room_from_id(self.game.room.e_to))
                  if hits[0].dir == 'w':
-                    self.game.change_room(self.game.room.w_to)
+                    self.game.change_room(room_from_id(self.game.room.w_to))
 
     def update(self):
         if self.can_move:
