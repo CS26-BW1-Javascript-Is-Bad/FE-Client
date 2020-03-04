@@ -6,6 +6,7 @@ from core.camera import *
 from core.domain.map import *
 from core.domain.platform import *
 from core.domain.player import *
+from core.domain.repository import *
 from core.domain.wall import *
 from core.map_generator import *
 from core.util.colors import *
@@ -102,24 +103,22 @@ class Game:
         self.wall_img = pg.transform.scale(self.wall_img, (TILESIZE, TILESIZE))
         self.platform_img = pg.image.load(path.join(sprite_folder, PLATFORM_IMG)).convert_alpha()
         self.platform_img = pg.transform.scale(self.platform_img, (TILESIZE, TILESIZE))
-        test_room = room_from_id(6)
-        self.map = Map([test_room])
+
+        self.map, first_room = get_map()
 
 
         self.map.game = self
 
-        #change this to starter room
-        rand_room = random.choice(self.map.rooms)
-        if rand_room.n_to != 0:
+        if first_room.n_to != 0:
             self.dir = 's'
-        elif rand_room.s_to != 0:
+        elif first_room.s_to != 0:
             self.dir = 'n'
-        elif rand_room.e_to != 0:
+        elif first_room.e_to != 0:
             self.dir = 'w'
-        elif rand_room.w_to != 0:
+        elif first_room.w_to != 0:
             self.dir = 'e'
         
-        self.change_room(rand_room)
+        self.change_room(first_room)
     
     def events(self):
         for event in pg.event.get():
@@ -145,6 +144,7 @@ class Game:
         pg.display.flip()
     
     def show_start_screen(self):
+
         pass
     
     def show_quit_screen(self):

@@ -1,7 +1,7 @@
 import pygame as pg
 
+from core.data.remote_data_source import room_from_id
 from core.domain.base_models.entity import *
-from core.domain.room import room_from_id
 from core.util.settings import *
 
 vec = pg.math.Vector2
