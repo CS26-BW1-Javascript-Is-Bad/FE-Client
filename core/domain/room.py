@@ -2,19 +2,22 @@ import pygame as pg
 import pytmx
 import requests
 import json
+
+from core.domain.map import Map
 from core.util.constants import *
 import os.path as path
 
 from core.util.settings import tilemap_folder
 
-def make_get_request(url, headers = None):
-    if headers!=None:
+
+def make_get_request(url, headers=None):
+    if headers != None:
         resp = requests.get(url, headers)
     else:
         resp = requests.get(url)
     if resp.status_code != 200:
         pass
-        #Error!
+        # Error!
     else:
         return resp.content
 
@@ -49,7 +52,9 @@ def login():
     test = requests.post('https://jibadventuregame.herokuapp.com/api/login/', ck)
     return json.loads(test.content)['key']
 
+
 Login_Token = login()
+
 
 def room_to_json(room):
     return {'asset': room.asset,
@@ -61,8 +66,20 @@ def room_to_json(room):
             'y': room.y
             }
 
+
+def map_from_json(input):
+    input_json = json.loads(input)
+
+    return Map(input_json['asset'], room_from_json(input_json['current_room']))
+
+
 def get_room_by_id(id):
     return room_from_json(make_get_request(id))
+
+
+def get_map():
+    ck = {'Authorization': f'token {Login_Token}'}
+    return room_from_json(make_get_request(f'{MAP_URL}', ck))
 
 
 class Room():
@@ -103,10 +120,11 @@ class Room():
         self.render(temp_surface)
         return temp_surface
 
+
 def player_change_room(dir):
-   # ck = {'Authorization': f'Token {Login_Token}'}
-   # make_get_request('https://jibadventuregame.herokuapp.com/api/adv/init/', ck)
-    ck = {'Authorization': f'Token {Login_Token}', "Content-Type":"application/json"}
+    # ck = {'Authorization': f'Token {Login_Token}'}
+    # make_get_request('https://jibadventuregame.herokuapp.com/api/adv/init/', ck)
+    ck = {'Authorization': f'Token {Login_Token}', "Content-Type": "application/json"}
     request_data = ""
     if dir == 'w':
         request_data = '{"direction":"w"}'
@@ -118,5 +136,3 @@ def player_change_room(dir):
         request_data = '{"direction":"e"}'
     request = make_post_request(MOVE_URL, ck, request_data)
     print(request)
-
-

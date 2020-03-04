@@ -102,13 +102,9 @@ class Game:
         self.wall_img = pg.transform.scale(self.wall_img, (TILESIZE, TILESIZE))
         self.platform_img = pg.image.load(path.join(sprite_folder, PLATFORM_IMG)).convert_alpha()
         self.platform_img = pg.transform.scale(self.platform_img, (TILESIZE, TILESIZE))
-        ck = {'Authorization' : f'Token {login()}'}
-        test2 = make_get_request('https://jibadventuregame.herokuapp.com/api/adv/room/6', ck)
-        test_room = room_from_json(test2)
+        test_room = room_from_id(6)
         self.map = Map([test_room])
-        self.dir = 'n'
 
-            #Room_Generator(int(math.sqrt(ROOM_COUNT))).make_map()
 
         self.map.game = self
 

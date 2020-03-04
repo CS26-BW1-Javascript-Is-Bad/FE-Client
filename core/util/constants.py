@@ -6,6 +6,7 @@ REGISTER_URL = f'{BASE_URL}register/'
 ADV_URL = f'{BASE_URL}adv/'
 MOVE_URL = f'{ADV_URL}move/'
 ROOM_BY_ID_URL = f'{ADV_URL}room/'
+MAP_URL = f'{ADV_URL}map/'
 
 
 # Player
