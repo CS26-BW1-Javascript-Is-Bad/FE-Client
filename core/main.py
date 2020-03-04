@@ -165,8 +165,6 @@ class Game:
         textinput2.font_object = pg.font.Font(pg.font.match_font('arial'), 30)
 
         username_focus = True
-        username = ""
-        password = ""
         login_successful = False
 
         while intro:
@@ -180,25 +178,42 @@ class Game:
 
             if username_focus:
                 if textinput.update(events):
-                    username = textinput.get_text()
                     username_focus = False
 
             else:
                 if textinput2.update(events):
-                    password = textinput2.get_text()
                     username_focus = True
-                    constants.TOKEN = login(username, password)
-                    if constants.TOKEN:
-                        return
-                    else:
-                        draw_text(self.screen, "Invalid Information", 30, w//2, 50)
 
             # Blit its surface onto the screen
             w, h = pg.display.get_surface().get_size()
+
             draw_text(self.screen, "Username", 30, w//2, h//2 - 200)
             self.screen.blit(textinput.get_surface(), (w//2-100, h//2 - 150))
             draw_text(self.screen, "Password", 30, w//2, h//2)
             self.screen.blit(textinput2.get_surface(), (w//2-100, h//2 + 50))
+
+            mouse = pygame.mouse
+
+            if w//2-175 + 150 > mouse.get_pos()[0] > w//2-175 and 500+50 > mouse.get_pos()[1] > 500:
+                pygame.draw.rect(self.screen, DARKGREY, (w//2-175, 500, 150, 50))
+                if pg.mouse.get_pressed()[0]:
+                    constants.TOKEN = login(textinput.get_text(), textinput2.get_text())
+                    if constants.TOKEN:
+                        return
+            else:
+                pygame.draw.rect(self.screen, LIGHTGREY, (w//2-175, 500, 150, 50))
+
+            if w//2+25 + 150 > mouse.get_pos()[0] > w//2+25 and 500 + 50 > mouse.get_pos()[1] > 500:
+                pygame.draw.rect(self.screen, DARKGREY, (w//2+25, 500, 150, 50))
+                if pg.mouse.get_pressed()[0]:
+                    constants.TOKEN = register(textinput.get_text(), textinput2.get_text())
+                    if constants.TOKEN:
+                        return
+            else:
+                pygame.draw.rect(self.screen, LIGHTGREY, (w//2+25, 500, 150, 50))
+
+            draw_text(self.screen, "Login", 15, w // 2 + 100, 515)
+            draw_text(self.screen, "Register", 15, w // 2 - 100, 515)
 
             pygame.display.update()
             self.clock.tick(30)

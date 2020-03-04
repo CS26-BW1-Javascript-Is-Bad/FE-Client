@@ -2,7 +2,7 @@
 # Api Constants
 BASE_URL = 'https://jibadventuregame.herokuapp.com/api/'
 LOGIN_URL = f'{BASE_URL}login/'
-REGISTER_URL = f'{BASE_URL}register/'
+REGISTER_URL = f'{BASE_URL}registration/'
 ADV_URL = f'{BASE_URL}adv/'
 MOVE_URL = f'{ADV_URL}move/'
 ROOM_BY_ID_URL = f'{ADV_URL}room/'

@@ -46,12 +46,23 @@ def room_from_json(input="", parsed_input=""):
 
 def login(username, password):
     ck = {'username': {username}, 'password': {password}}
-    test = requests.post('https://jibadventuregame.herokuapp.com/api/login/', ck)
-    if test.status_code != 200:
+    login_test = requests.post(constants.LOGIN_URL, ck)
+    if login_test.status_code != 200:
         return None
     else:
-        return json.loads(test.content)['key']
+        return json.loads(login_test.content)['key']
 
+
+def register(username, password):
+    ck = {'username': {username}, 'password1': {password}, 'password2' : {password}}
+    register_test = requests.post(constants.REGISTER_URL, ck)
+    if register_test.status_code != 201:
+        return None
+    else:
+        constants.TOKEN = json.loads(register_test.content)['key']
+        ck = {'Authorization': f'Token {constants.TOKEN}'}
+        make_get_request(url='https://jibadventuregame.herokuapp.com/api/adv/init/', headers=ck)
+        return json.loads(register_test.content)['key']
 
 
 def room_to_json(room):
