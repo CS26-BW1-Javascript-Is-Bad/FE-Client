@@ -1,10 +1,10 @@
-from util.settings import *
-from util.colors import *
 import math
+import core.util.constants as constants
 import os.path as path
 import pygame as pg
 import pytmx
 
+from core.util.colors import *
 from core.util.settings import *
 
 
@@ -16,8 +16,59 @@ class Map:
         self.game = None
         self.mini_map = None
 
-    def make_mini_map(self):
-        self.mini_map = MiniMap(self.game, self)
+
+    def show_map(self):
+        grid_size = math.sqrt(len(self.rooms))
+        x, y = self.game.screen.get_size()
+        room_size = int(x / grid_size * .2)
+        pos = (x//2 - (room_size * (grid_size//2)), y//2 - (room_size * (grid_size//2)))
+
+        self.game.screen.fill(BLACK)
+        while True:
+
+            offsety = 0
+            offsetx = 0
+            i = 1
+            counter = 0
+            events = pg.event.get()
+            for event in events:
+                print(event)
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    quit()
+
+            keys = pg.key.get_pressed()
+            if keys[pg.K_n]:
+               return
+
+            while i < grid_size + 1:
+                j = 1
+                while j < grid_size + 1:
+                    offsetx = j * room_size + 40
+                    offsety = i * room_size + 40
+                    pg.draw.rect(self.game.screen, LIGHTGREY, (pos[0] + offsetx + 5, pos[1] + offsety + 5, room_size, room_size))
+
+                    self.game.screen
+                    if self.rooms[counter].n_to:
+                        pass
+                        # draw north rect
+                    if self.rooms[counter].s_to:
+                        pass
+                        # draw south rect
+                    if self.rooms[counter].e_to:
+                        pass
+                        # draw east rect
+                    if self.rooms[counter].w_to:
+                        pass
+                        # draw west rect
+                    j += 1
+                    counter += 1
+                i += 1
+            pg.display.update()
+            pg.display.flip()
+
+
+
 
 
 class MiniMap():

@@ -46,6 +46,8 @@ class Player(Entity):
             if self.can_jump:
                 self.jump()
                 self.can_jump = False
+        if keys[pg.K_m]:
+            self.game.map.show_map()
         
     def jump(self):
         self.vel.y = -20

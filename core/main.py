@@ -108,6 +108,7 @@ class Game:
         self.platform_img = pg.transform.scale(self.platform_img, (TILESIZE, TILESIZE))
 
         self.map, first_room = get_map()
+        self.map.game = self
 
 
         self.map.game = self
