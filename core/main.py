@@ -159,11 +159,11 @@ class Game:
         intro = True
         textinput = TextInput()
         textinput.antialias = True
-        textinput.font_object = pg.font.Font(pg.font.match_font('arial'), 30)
+        textinput.font_object = pg.font.Font(path.join(game_folder,'data/arial.ttf'), 30)
 
         textinput2 = TextInput()
         textinput2.antialias = True
-        textinput2.font_object = pg.font.Font(pg.font.match_font('arial'), 30)
+        textinput2.font_object = pg.font.Font(path.join(game_folder, 'data/arial.ttf'), 30)
 
         username_focus = True
         login_successful = False

@@ -1,8 +1,12 @@
 import pygame as pg
 from core.util.colors import *
+import os.path as path
+
+from core.util.settings import game_folder
+
 
 def draw_text(surf, text, size, x, y):
-    font = pg.font.Font(pg.font.match_font('arial'), size)
+    font = pg.font.Font(path.join(game_folder, 'data/arial.ttf'), size)
     # True is for Anti Aliasing
     text_surface = font.render(text, True, BLACK)
     text_rect = text_surface.get_rect()

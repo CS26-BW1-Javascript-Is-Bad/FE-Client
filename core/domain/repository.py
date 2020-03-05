@@ -1,4 +1,4 @@
-from core.data.remote_data_source import *
+from core.domain.remote_data_source import *
 import core.util.constants as constants
 
 

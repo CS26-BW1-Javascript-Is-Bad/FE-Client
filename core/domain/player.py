@@ -1,6 +1,6 @@
 import pygame as pg
 
-from core.data.remote_data_source import room_from_id
+from core.domain.remote_data_source import room_from_id
 from core.domain.base_models.entity import *
 from core.util.settings import *
 
