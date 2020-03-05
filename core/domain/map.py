@@ -5,6 +5,7 @@ import pygame as pg
 import pytmx
 
 from core.util.colors import *
+from core.util.functions import draw_text
 from core.util.settings import *
 
 
@@ -23,7 +24,7 @@ class Map:
         room_size = int(x / grid_size * .2)
         pos = (x//2 - (room_size * (grid_size//2)), y//2 - (room_size * (grid_size//2)))
 
-        self.game.screen.fill(BLACK)
+        #self.game.screen.fill(BLACK)
         while True:
 
             offsety = 0
@@ -39,36 +40,29 @@ class Map:
 
             keys = pg.key.get_pressed()
             if keys[pg.K_n]:
-               return
+                return
+            room_dimension = 30
+            room_scale = 70
+            n_to_x_offset = 15
+            n_to_y_offset = 30
+            n_to_line_width = 8
+            n_to_line_height = 30
+            for room in self.rooms:
+                room_color = PURPLE
+                if room.x == self.game.room.x and room.y == self.game.room.y:
+                    room_color = GREEN
+                pg.draw.rect(self.game.screen, room_color, (room.y * room_scale, room.x * room_scale, room_dimension, room_dimension))
+                if room.n_to != 0:
+                    pg.draw.rect(self.game.screen, RED, (room.y * room_scale + n_to_x_offset,
+                                                         room.x * room_scale - n_to_y_offset, n_to_line_width,
+                                                         n_to_line_height))
+                if room.e_to != 0:
+                    pg.draw.rect(self.game.screen, RED, (room.y * room_scale + n_to_y_offset,
+                                                         room.x * room_scale + n_to_x_offset, n_to_line_height,
+                                                         n_to_line_width))
 
-            while i < grid_size + 1:
-                j = 1
-                while j < grid_size + 1:
-                    offsetx = j * room_size + 40
-                    offsety = i * room_size + 40
-                    pg.draw.rect(self.game.screen, LIGHTGREY, (pos[0] + offsetx + 5, pos[1] + offsety + 5, room_size, room_size))
-
-                    self.game.screen
-                    if self.rooms[counter].n_to:
-                        pass
-                        # draw north rect
-                    if self.rooms[counter].s_to:
-                        pass
-                        # draw south rect
-                    if self.rooms[counter].e_to:
-                        pass
-                        # draw east rect
-                    if self.rooms[counter].w_to:
-                        pass
-                        # draw west rect
-                    j += 1
-                    counter += 1
-                i += 1
             pg.display.update()
             pg.display.flip()
-
-
-
 
 
 class MiniMap():
