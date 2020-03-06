@@ -213,8 +213,8 @@ class Game:
             else:
                 pygame.draw.rect(self.screen, LIGHTGREY, (w//2+25, 500, 150, 50))
 
-            draw_text(self.screen, "Login", 15, w // 2 + 100, 515)
-            draw_text(self.screen, "Register", 15, w // 2 - 100, 515)
+            draw_text(self.screen, "Register", 15, w // 2 + 100, 515)
+            draw_text(self.screen, "Login", 15, w // 2 - 100, 515)
 
             pygame.display.update()
             self.clock.tick(30)
