@@ -41,6 +41,8 @@ class Map:
             keys = pg.key.get_pressed()
             if keys[pg.K_n]:
                 return
+            offset_y = 150
+            offset_x = 50
             room_dimension = 12
             room_scale = 30
             n_to_x_offset = 4
@@ -51,14 +53,15 @@ class Map:
                 room_color = PURPLE
                 if room.x == self.game.room.x and room.y == self.game.room.y:
                     room_color = GREEN
-                pg.draw.rect(self.game.screen, room_color, (room.y * room_scale, room.x * room_scale, room_dimension, room_dimension))
+                pg.draw.rect(self.game.screen, room_color, (offset_y + room.y * room_scale, offset_x + room.x * room_scale,
+                                                            room_dimension, room_dimension))
                 if room.n_to != 0:
-                    pg.draw.rect(self.game.screen, RED, (room.y * room_scale + n_to_x_offset,
-                                                         room.x * room_scale - n_to_y_offset, n_to_line_width,
+                    pg.draw.rect(self.game.screen, RED, (offset_y + room.y * room_scale + n_to_x_offset,
+                                                         offset_x + room.x * room_scale - n_to_y_offset, n_to_line_width,
                                                          n_to_line_height))
                 if room.e_to != 0:
-                    pg.draw.rect(self.game.screen, RED, (room.y * room_scale + n_to_y_offset - 4,
-                                                         room.x * room_scale + n_to_x_offset, n_to_line_height,
+                    pg.draw.rect(self.game.screen, RED, (offset_y + room.y * room_scale + n_to_y_offset - 4,
+                                                         offset_x + room.x * room_scale + n_to_x_offset, n_to_line_height,
                                                          n_to_line_width))
 
             pg.display.update()
