@@ -41,12 +41,12 @@ class Map:
             keys = pg.key.get_pressed()
             if keys[pg.K_n]:
                 return
-            room_dimension = 30
-            room_scale = 70
-            n_to_x_offset = 15
-            n_to_y_offset = 30
-            n_to_line_width = 8
-            n_to_line_height = 30
+            room_dimension = 12
+            room_scale = 30
+            n_to_x_offset = 4
+            n_to_y_offset = 17
+            n_to_line_width = 4
+            n_to_line_height = 18
             for room in self.rooms:
                 room_color = PURPLE
                 if room.x == self.game.room.x and room.y == self.game.room.y:
@@ -57,7 +57,7 @@ class Map:
                                                          room.x * room_scale - n_to_y_offset, n_to_line_width,
                                                          n_to_line_height))
                 if room.e_to != 0:
-                    pg.draw.rect(self.game.screen, RED, (room.y * room_scale + n_to_y_offset,
+                    pg.draw.rect(self.game.screen, RED, (room.y * room_scale + n_to_y_offset - 4,
                                                          room.x * room_scale + n_to_x_offset, n_to_line_height,
                                                          n_to_line_width))
 
